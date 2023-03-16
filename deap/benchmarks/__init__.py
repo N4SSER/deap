@@ -464,7 +464,7 @@ def zdt6(individual):
     f2 = g * (1 - (f1/g)**2)
     return f1, f2
 
-def dtlz1(individual, obj):
+def dtlz1(individual):
     r"""DTLZ1 multiobjective function. It returns a tuple of *obj* values.
     The individual must have at least *obj* elements.
     From: K. Deb, L. Thiele, M. Laumanns and E. Zitzler. Scalable Multi-Objective
@@ -487,12 +487,13 @@ def dtlz1(individual, obj):
     individual in :math:`n > m` dimensions.
 
     """
+    obj = 2
     g = 100 * (len(individual[obj-1:]) + sum((xi-0.5)**2 - cos(20*pi*(xi-0.5)) for xi in individual[obj-1:]))
     f = [0.5 * reduce(mul, individual[:obj-1], 1) * (1 + g)]
     f.extend(0.5 * reduce(mul, individual[:m], 1) * (1 - individual[m]) * (1 + g) for m in reversed(range(obj-1)))
     return f
 
-def dtlz2(individual, obj):
+def dtlz2(individual):
     r"""DTLZ2 multiobjective function. It returns a tuple of *obj* values.
     The individual must have at least *obj* elements.
     From: K. Deb, L. Thiele, M. Laumanns and E. Zitzler. Scalable Multi-Objective
@@ -512,6 +513,7 @@ def dtlz2(individual, obj):
     vector of the remaining attributes :math:`[x_m~\ldots~x_n]` of the
     individual in :math:`n > m` dimensions.
     """
+    obj = 2
     xc = individual[:obj-1]
     xm = individual[obj-1:]
     g = sum((xi-0.5)**2 for xi in xm)
@@ -520,7 +522,7 @@ def dtlz2(individual, obj):
 
     return f
 
-def dtlz3(individual, obj):
+def dtlz3(individual):
     r"""DTLZ3 multiobjective function. It returns a tuple of *obj* values.
     The individual must have at least *obj* elements.
     From: K. Deb, L. Thiele, M. Laumanns and E. Zitzler. Scalable Multi-Objective
@@ -540,6 +542,7 @@ def dtlz3(individual, obj):
     vector of the remaining attributes :math:`[x_m~\ldots~x_n]` of the
     individual in :math:`n > m` dimensions.
     """
+    obj = 2
     xc = individual[:obj-1]
     xm = individual[obj-1:]
     g = 100 * (len(xm) + sum((xi-0.5)**2 - cos(20*pi*(xi-0.5)) for xi in xm))
@@ -547,7 +550,7 @@ def dtlz3(individual, obj):
     f.extend((1.0+g) * reduce(mul, (cos(0.5*xi*pi) for xi in xc[:m]), 1) * sin(0.5*xc[m]*pi) for m in range(obj-2, -1, -1))
     return f
 
-def dtlz4(individual, obj, alpha):
+def dtlz4(individual):
     r"""DTLZ4 multiobjective function. It returns a tuple of *obj* values. The
     individual must have at least *obj* elements. The *alpha* parameter allows
     for a meta-variable mapping in :func:`dtlz2` :math:`x_i \rightarrow
@@ -569,6 +572,8 @@ def dtlz4(individual, obj, alpha):
     vector of the remaining attributes :math:`[x_m~\ldots~x_n]` of the
     individual in :math:`n > m` dimensions.
     """
+    obj = 2
+    alpha = 100
     xc = individual[:obj-1]
     xm = individual[obj-1:]
     g = sum((xi-0.5)**2 for xi in xm)
@@ -576,12 +581,13 @@ def dtlz4(individual, obj, alpha):
     f.extend((1.0+g) * reduce(mul, (cos(0.5*xi**alpha*pi) for xi in xc[:m]), 1) * sin(0.5*xc[m]**alpha*pi) for m in range(obj-2, -1, -1))
     return f
 
-def dtlz5(ind, n_objs):
+def dtlz5(ind):
     r"""DTLZ5 multiobjective function. It returns a tuple of *obj* values. The
     individual must have at least *obj* elements.
     From: K. Deb, L. Thiele, M. Laumanns and E. Zitzler. Scalable Multi-Objective
     Optimization Test Problems. CEC 2002, p. 825-830, IEEE Press, 2002.
     """
+    n_objs = 2
     g = lambda x: sum([(a - 0.5)**2 for a in x])
     gval = g(ind[n_objs-1:])
 
@@ -596,12 +602,13 @@ def dtlz5(ind, n_objs):
                        reduce(lambda x,y: x*y, [cos(theta(a)) for a in ind[1:m-1]], 1) * sin(theta(ind[m-1])))
     return fit
 
-def dtlz6(ind, n_objs):
+def dtlz6(ind):
     r"""DTLZ6 multiobjective function. It returns a tuple of *obj* values. The
     individual must have at least *obj* elements.
     From: K. Deb, L. Thiele, M. Laumanns and E. Zitzler. Scalable Multi-Objective
     Optimization Test Problems. CEC 2002, p. 825-830, IEEE Press, 2002.
     """
+    n_objs = 2
     gval = sum([a**0.1 for a in ind[n_objs-1:]])
     theta = lambda x: pi / (4.0 * (1 + gval)) * (1 + 2 * gval * x)
 
@@ -616,12 +623,13 @@ def dtlz6(ind, n_objs):
                        reduce(lambda x,y: x*y, [cos(theta(a)) for a in ind[1:m-1]], 1) * sin(theta(ind[m-1])))
     return fit
 
-def dtlz7(ind, n_objs):
+def dtlz7(ind):
     r"""DTLZ7 multiobjective function. It returns a tuple of *obj* values. The
     individual must have at least *obj* elements.
     From: K. Deb, L. Thiele, M. Laumanns and E. Zitzler. Scalable Multi-Objective
     Optimization Test Problems. CEC 2002, p. 825-830, IEEE Press, 2002.
     """
+    n_objs = 2
     gval = 1 + 9.0 / len(ind[n_objs-1:]) * sum([a for a in ind[n_objs-1:]])
     fit = [x for x in ind[:n_objs-1]]
     fit.append((1 + gval) * (n_objs - sum([a / (1.0 + gval) * (1 + sin(3 * pi * a)) for a in ind[:n_objs-1]])))
