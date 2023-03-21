@@ -449,6 +449,23 @@ def zdt4(individual):
     f2 = g * (1 - sqrt(f1/g))
     return f1, f2
 
+def zdt5(individual):
+    r"""ZDT5 multiobjective function.
+    :math:`g(\mathbf{x}) = 1 + 10(n-1) + \sum_{i=2}^n \left[ x_i^2 - 10\cos(4\pi x_i) \right]`
+    :math:`f_{\text{ZDT5}1}(\mathbf{x}) = 1 - \exp \left[ -4x_1^2 \right] \sin^6(6\pi x_1)`
+    :math:`f_{\text{ZDT5}2}(\mathbf{x}) = g(\mathbf{x})\left[ 1 - \sqrt{x_1/g(\mathbf{x})} \right]`
+    """
+    n = len(individual) # Number of decision variables
+
+    def g(x):
+        return 1 + 10*(n-1) + sum(xi**2 - 10*cos(4*pi*xi) for xi in x[1:])
+
+    f1 = 1 - exp(-4*individual[0]**2) * sin(6*pi*individual[0])**6
+    g_value = g(individual)
+    f2 = g_value * (1 - sqrt(individual[0]/g_value))
+
+    return f1, f2
+
 def zdt6(individual):
     r"""ZDT6 multiobjective function.
 
